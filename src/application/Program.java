@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 import model.entities.Product;
 
@@ -17,10 +18,20 @@ public class Program {
 	public static void main(String[] args) {
 		
 		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
+		
 		List<Product> list = new ArrayList<>();
-		String path = "c:\\temp\\list.csv";
-		new File("c:\\temp\\" + "out").mkdir();
-		String pathWrite = "c:\\temp\\out\\summary.csv";
+		
+		System.out.print("Enter file path: ");
+		String path = sc.nextLine();
+		
+		File sourceFile = new File(path);
+		String sourceFolderStr = sourceFile.getParent();
+		
+		boolean success = new File(sourceFolderStr + "\\out").mkdir();
+		System.out.println("Directory created successfully: " + success);
+		
+		String pathWrite = sourceFolderStr +"\\out\\summary.csv";
 
 		try(BufferedReader br = new BufferedReader(new FileReader(path))){
 			String line = br.readLine();
@@ -40,6 +51,7 @@ public class Program {
 					bw.write(item.getName() + ", " + String.format("%.2f", item.sum()));
 					bw.newLine();
 				}
+				System.out.println(pathWrite + " CREATED!");
 			}
 			catch(IOException e) {
 				System.out.println("Error writing file: " + e.getMessage());
@@ -49,7 +61,7 @@ public class Program {
 			System.out.println("Error reading file: "+e.getMessage());
 		}
 				
-
+		sc.close();
 	}
 
 }
